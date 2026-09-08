@@ -1,33 +1,28 @@
-# CollegeAssist AI - Intelligent Campus Assistant with RAG 🏛️
+# HealthEduBot - AI Health Education Chatbot 🩺
 
-**CollegeAssist AI** is an AI-powered college assistant application that provides accurate, source-cited information from official college documents using **Retrieval-Augmented Generation (RAG)**.
-
----
-
-## 🌟 Key Features & RAG Rules
-
-- **Document Knowledge Base**: Indexed official documents including:
-  - `Admission Guidelines 2026–27`
-  - `Academic Calendar 2026–27`
-  - `Fee Structure & Regulations 2026–27`
-  - `Examination Regulations 2026`
-  - `Hostel Rules & Facilities Handbook`
-  - `Placement Cell Guidelines 2026`
-- **Structured Response Format**:
-  ```text
-  Answer: Direct answer derived from retrieved context.
-  Details: Bullet points with specific details.
-  Source: Document Name, Page X (e.g., Source: Admission Guidelines 2026–27, Page 2)
-  ```
-- **Unknown Information Fallback**: If information is missing from official documents, responds:  
-  `"I couldn't find this information in the available college documents. Please check with the relevant college department or official notice."`
-- **Ambiguity Clarification**: Automatically detects vague prompts (e.g. *"Tell me about exams"*) and prompts for clarification.
-- **Latest Notice Priority**: Automatically resolves conflicts by preferring newer dated official notices over older drafts.
-- **Custom Document Ingestion**: Ingest custom college notices or text into the live RAG index.
+**HealthEduBot** is an AI-powered health education web application designed to provide clear, reliable, easy-to-understand general health information. It helps users learn about health, wellness, diseases, nutrition, fitness, hygiene, and basic first aid.
 
 ---
 
-## 🚀 Quick Start / Running Locally
+## 🌟 Key Features
+
+- **Structured Response Format**: Formats all educational outputs into 6 structured sections:
+  1. 📌 **What it is**
+  2. 🩺 **Common symptoms**
+  3. 🔍 **Possible causes**
+  4. 🌿 **Prevention / Healthy habits**
+  5. 🚨 **When to seek medical help**
+  6. ⚠️ **Important Disclaimer**
+- **Emergency Safeguard Detection**: Real-time detection of red-flag symptoms (*chest pain, severe difficulty breathing, stroke signs, severe bleeding*) with immediate warnings to contact local emergency hotlines (**911 / 112 / 999**).
+- **Non-Diagnostic & Non-Prescribing Policy**: Strictly refrains from declaring definitive diagnoses or prescribing medications.
+- **Interactive UI**: Modern Emerald Teal & Dark/Light mode user interface.
+- **Text-to-Speech (TTS)**: Built-in Speech Synthesis to listen to responses read aloud.
+- **Topic Explorer**: Browse and search pre-formatted medical & wellness topics.
+- **Export Transcript**: Save health conversations as Markdown files.
+
+---
+
+## 🚀 Quick Start / Local Setup
 
 1. **Clone the Repository**:
    ```bash
@@ -36,16 +31,29 @@
    ```
 
 2. **Run the Application**:
+   Using Node.js (Zero external dependencies required):
    ```bash
-   python app.py
+   node server.js
    ```
 
-3. **Open in Web Browser**:
-   Navigate to **`http://127.0.0.1:3000/`**
+3. **Open in Browser**:
+   Navigate to `http://127.0.0.1:3000/` in your web browser.
 
 ---
 
-## ⚠️ Privacy & Safety Rules
+## 📁 Repository Structure
 
-- Never requests or stores sensitive credentials (passwords, OTPs, card details).
-- Zero hallucination policy: Only provides information backed by indexed college documents.
+```
+├── index.html        # Main HTML web interface
+├── styles.css        # Custom CSS styling (Light/Dark themes, responsive design)
+├── app.js            # HealthEduBot persona engine, emergency detector, TTS, storage
+├── server.js         # Zero-dependency Node.js HTTP server
+├── package.json      # Project configuration
+└── README.md         # Project documentation
+```
+
+---
+
+## ⚠️ Disclaimer
+
+HealthEduBot provides general health educational information only and is **not** a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified doctor or healthcare professional for personalized medical care.

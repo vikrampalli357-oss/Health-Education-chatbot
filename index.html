@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CollegeAssist AI - Campus RAG Assistant</title>
-  <meta name="description" content="CollegeAssist AI provides accurate, source-cited information from official college documents using Retrieval-Augmented Generation (RAG)." />
-  <link rel="stylesheet" href="styles.css?v=2.0" />
+  <title>HealthEduBot - AI Health Education Assistant</title>
+  <meta name="description" content="HealthEduBot provides clear, reliable, easy-to-understand general health education, symptom safety guidelines, and wellness topics." />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
@@ -14,128 +14,118 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="brand">
-          <div class="brand-icon">🏛️</div>
+          <div class="brand-icon">🩺</div>
           <div>
-            <div class="brand-title">CollegeAssist AI</div>
-            <div class="brand-subtitle">Campus RAG Assistant</div>
+            <div class="brand-title">HealthEduBot</div>
+            <div class="brand-subtitle">Health Assistant</div>
           </div>
         </div>
       </div>
 
       <div class="sidebar-content">
-        <!-- RAG Active Knowledge Base -->
-        <div>
-          <div class="sidebar-section-title">
-            <span>📚 College Documents</span>
-            <span class="badge-rag">Active RAG</span>
+        <!-- Emergency Notice Card -->
+        <div class="emergency-sidebar-card">
+          <div class="emergency-sidebar-title">
+            <span>🚨</span> Emergency Hotline
           </div>
-          <div class="doc-list" id="docListContainer">
-            <!-- Dynamic Document Chunks rendering via app.js -->
+          <div class="emergency-sidebar-desc">
+            In case of severe chest pain, breathing difficulty, or trauma, contact emergency care immediately.
+          </div>
+          <div class="emergency-numbers">
+            <span class="badge-emergency">911 (US)</span>
+            <span class="badge-emergency">112 (EU)</span>
+            <span class="badge-emergency">999 (UK)</span>
           </div>
         </div>
 
-        <!-- Quick Inquiries -->
+        <!-- Preset Topics -->
         <div>
-          <div class="sidebar-section-title">Campus Queries</div>
-          <div class="preset-prompts">
-            <button class="prompt-btn" onclick="fillPrompt('What documents are required for admission?')">
-              <span>📜</span> Admission Documents
-            </button>
-            <button class="prompt-btn" onclick="fillPrompt('What is the fee structure for B.Tech?')">
-              <span>💳</span> Tuition & Exam Fees
-            </button>
-            <button class="prompt-btn" onclick="fillPrompt('When do admissions close for 2026?')">
-              <span>📅</span> Admission Deadline
-            </button>
-            <button class="prompt-btn" onclick="fillPrompt('What are the night curfew timings for the hostel?')">
-              <span>🌙</span> Hostel Regulations
-            </button>
-            <button class="prompt-btn" onclick="fillPrompt('What CGPA is required for campus placement?')">
-              <span>💼</span> Placement Cutoff
-            </button>
-            <button class="prompt-btn" onclick="fillPrompt('Tell me about exams')">
-              <span>🔍</span> Exam Timetable Query
-            </button>
+          <div class="sidebar-section-title">Educational Topics</div>
+          <div class="preset-topics" id="presetTopicsContainer">
+            <!-- Dynamic Topics JS -->
           </div>
         </div>
       </div>
 
       <div class="sidebar-footer">
-        <button class="action-icon-btn" id="themeToggleBtn" title="Toggle Dark/Light Theme">
+        <button class="action-icon-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
           🌙
         </button>
-        <button class="btn-secondary" id="openDocsBtn" style="font-size: 0.8rem; padding: 6px 10px;">
-          📖 RAG Index
+        <button class="btn-secondary" id="openExplorerBtn" style="font-size: 0.8rem; padding: 6px 10px;">
+          📚 Browse Topics
         </button>
-        <button class="action-icon-btn" id="exportChatBtn" title="Export Transcript">
+        <button class="action-icon-btn" id="exportChatBtn" title="Export Conversation Markdown">
           📥
         </button>
-        <button class="action-icon-btn" id="clearChatBtn" title="Clear History">
+        <button class="action-icon-btn" id="clearChatBtn" title="Clear Chat History">
           🗑️
         </button>
       </div>
     </aside>
 
-    <!-- Main Workspace -->
+    <!-- Main Chat Workspace -->
     <main class="main-chat-area">
-      <!-- Chat Header -->
+      <!-- Chat Header Bar -->
       <header class="chat-header">
         <div class="chat-header-info">
           <div class="status-dot"></div>
           <div>
-            <div class="header-title">CollegeAssist AI - RAG Campus Knowledge System</div>
-            <div class="header-subtitle">Retrieval-Augmented Generation • Official College Source Citations</div>
+            <div class="header-title">HealthEduBot Education Hub</div>
+            <div class="header-subtitle">Educational Information • Non-Diagnostic • Evidence-Based</div>
           </div>
         </div>
         <div class="header-actions">
-          <button class="btn-secondary" onclick="exportChatTranscript()">
+          <button class="btn-secondary" id="exportChatBtnHeader" onclick="exportChatTranscript()">
             📥 Export Report
           </button>
         </div>
       </header>
 
-      <!-- RAG Active Status Bar -->
-      <div class="rag-status-bar">
-        <div class="rag-status-info">
-          <span>🏛️</span> Active Assistant: <strong>CollegeAssist AI</strong> (RAG Source Mode: Admissions, Fees, Exams, Hostels, Placements)
+      <!-- Emergency Active Warning Banner -->
+      <div class="emergency-banner" id="emergencyBanner">
+        <div class="emergency-banner-content">
+          <span class="emergency-banner-icon">🚨</span>
+          <div>
+            <strong>URGENT MEDICAL WARNING:</strong> If you or someone else is experiencing life-threatening symptoms (chest pain, stroke signs, severe bleeding, or unconsciousness), call your local emergency service (911 / 112 / 999) immediately!
+          </div>
         </div>
-        <div>7 Documents Indexed</div>
+        <button class="emergency-close" onclick="dismissEmergencyBanner()">Dismiss</button>
       </div>
 
-      <!-- Chat Messages Area -->
+      <!-- Chat Messages Scroll Area -->
       <div class="chat-messages" id="chatMessages">
-        <!-- Welcome Card -->
+        <!-- Welcome Banner -->
         <div class="welcome-card" id="welcomeCard">
-          <h2 class="welcome-title">Welcome to CollegeAssist AI 🏛️</h2>
-          <p class="welcome-desc">Your official campus assistant. Ask questions about college admissions, fee structures, academic calendars, examination rules, hostel regulations, or placement criteria.</p>
+          <h2 class="welcome-title">Welcome to HealthEduBot 🩺</h2>
+          <p class="welcome-desc">Your AI-powered health education assistant. Ask about conditions, wellness, nutrition, fitness, hygiene, basic first aid, or common symptoms.</p>
           
           <div class="disclaimer-pill">
-            <span>🛡️</span> Source of Truth: All answers are generated directly from verified college documents with page citations.
+            <span>⚠️</span> Educational purpose only. HealthEduBot does not diagnose conditions or prescribe medications.
           </div>
 
           <div class="quick-prompts-grid">
-            <div class="prompt-card" onclick="fillPrompt('What documents are required for admission?')">
-              <span class="prompt-card-icon">📜</span>
-              <span class="prompt-card-title">Admission Documents</span>
-              <span class="prompt-card-subtitle">Required certificates & IDs</span>
+            <div class="prompt-card" onclick="fillPrompt('What is diabetes?')">
+              <span class="prompt-card-icon">🩸</span>
+              <span class="prompt-card-title">What is diabetes?</span>
+              <span class="prompt-card-subtitle">Symptoms, causes & management</span>
             </div>
 
-            <div class="prompt-card" onclick="fillPrompt('What is the fee structure for B.Tech?')">
-              <span class="prompt-card-icon">💳</span>
-              <span class="prompt-card-title">Fee Breakdown</span>
-              <span class="prompt-card-subtitle">Tuition, exams & deposits</span>
+            <div class="prompt-card" onclick="fillPrompt('How to improve sleep hygiene?')">
+              <span class="prompt-card-icon">🌙</span>
+              <span class="prompt-card-title">Sleep Hygiene</span>
+              <span class="prompt-card-subtitle">Practical habits for restorative sleep</span>
             </div>
 
-            <div class="prompt-card" onclick="fillPrompt('What attendance percentage is required for exams?')">
-              <span class="prompt-card-icon">📝</span>
-              <span class="prompt-card-title">Exam Rules</span>
-              <span class="prompt-card-subtitle">Attendance & hall ticket policy</span>
+            <div class="prompt-card" onclick="fillPrompt('First aid for minor thermal burns')">
+              <span class="prompt-card-icon">🩹</span>
+              <span class="prompt-card-title">First Aid for Burns</span>
+              <span class="prompt-card-subtitle">Immediate safe care steps</span>
             </div>
 
-            <div class="prompt-card" onclick="fillPrompt('What is the highest and average placement package?')">
-              <span class="prompt-card-icon">💼</span>
-              <span class="prompt-card-title">Placement Records</span>
-              <span class="prompt-card-subtitle">Packages & CGPA cutoff</span>
+            <div class="prompt-card" onclick="fillPrompt('What causes frequent tension headaches?')">
+              <span class="prompt-card-icon">🧠</span>
+              <span class="prompt-card-title">Tension Headaches</span>
+              <span class="prompt-card-subtitle">Triggers, prevention & when to seek help</span>
             </div>
           </div>
         </div>
@@ -147,7 +137,7 @@
           <textarea 
             id="chatInput" 
             class="chat-input" 
-            placeholder="Ask CollegeAssist AI anything about the college... (e.g., 'What documents are required for admission?')"
+            placeholder="Ask HealthEduBot a health, nutrition, or wellness question... (e.g. 'What is diabetes?')"
             rows="1"
           ></textarea>
           <button class="send-btn" id="sendBtn" title="Send message">
@@ -155,30 +145,33 @@
           </button>
         </div>
         <div class="input-hint">
-          Source of Truth: Official College Knowledge Base. Missing information is flagged automatically.
+          HealthEduBot provides general education. Always consult a qualified physician for medical diagnosis.
         </div>
       </footer>
     </main>
   </div>
 
-  <!-- Document Knowledge Base Modal -->
-  <div class="modal-overlay" id="docsModal">
+  <!-- Topic Explorer Modal -->
+  <div class="modal-overlay" id="explorerModal">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title">📖 RAG Knowledge Base & Indexed Chunks</div>
-        <button class="modal-close" id="closeDocsBtn">&times;</button>
+        <div class="modal-title">📚 Health Education Topic Library</div>
+        <button class="modal-close" id="closeExplorerBtn">&times;</button>
       </div>
       <div class="modal-body">
-        <button class="btn-secondary" style="margin-bottom: 16px;" onclick="handleCustomDocUpload()">
-          ➕ Ingest New College Notice / Document
-        </button>
-        <div id="modalChunkContainer">
-          <!-- Rendered via app.js -->
+        <input 
+          type="text" 
+          id="topicSearchInput" 
+          class="topic-search-input" 
+          placeholder="Search health topics (e.g., nutrition, hypertension, cold, first aid)..." 
+        />
+        <div class="topic-list-grid" id="topicGridContainer">
+          <!-- Dynamic topics rendering -->
         </div>
       </div>
     </div>
   </div>
 
-  <script src="app.js?v=2.0"></script>
+  <script src="app.js"></script>
 </body>
 </html>

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CollegeAssist AI - RAG College Assistant</title>
+  <title>CollegeAssist AI - Campus RAG Assistant</title>
   <meta name="description" content="CollegeAssist AI provides accurate, source-cited information from official college documents using Retrieval-Augmented Generation (RAG)." />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2.0" />
 </head>
 <body>
 
@@ -17,7 +17,7 @@
           <div class="brand-icon">🏛️</div>
           <div>
             <div class="brand-title">CollegeAssist AI</div>
-            <div class="brand-subtitle">RAG Knowledge Engine</div>
+            <div class="brand-subtitle">Campus RAG Assistant</div>
           </div>
         </div>
       </div>
@@ -34,9 +34,9 @@
           </div>
         </div>
 
-        <!-- Quick Topic Prompts -->
+        <!-- Quick Inquiries -->
         <div>
-          <div class="sidebar-section-title">Quick Inquiries</div>
+          <div class="sidebar-section-title">Campus Queries</div>
           <div class="preset-prompts">
             <button class="prompt-btn" onclick="fillPrompt('What documents are required for admission?')">
               <span>📜</span> Admission Documents
@@ -51,10 +51,10 @@
               <span>🌙</span> Hostel Regulations
             </button>
             <button class="prompt-btn" onclick="fillPrompt('What CGPA is required for campus placement?')">
-              <span>💼</span> Placement Eligibility
+              <span>💼</span> Placement Cutoff
             </button>
             <button class="prompt-btn" onclick="fillPrompt('Tell me about exams')">
-              <span>🔍</span> Exam Query (Clarifying)
+              <span>🔍</span> Exam Timetable Query
             </button>
           </div>
         </div>
@@ -67,29 +67,29 @@
         <button class="btn-secondary" id="openDocsBtn" style="font-size: 0.8rem; padding: 6px 10px;">
           📖 RAG Index
         </button>
-        <button class="action-icon-btn" id="exportChatBtn" title="Export Markdown Transcript">
+        <button class="action-icon-btn" id="exportChatBtn" title="Export Transcript">
           📥
         </button>
-        <button class="action-icon-btn" id="clearChatBtn" title="Clear Chat History">
+        <button class="action-icon-btn" id="clearChatBtn" title="Clear History">
           🗑️
         </button>
       </div>
     </aside>
 
-    <!-- Main Chat Workspace -->
+    <!-- Main Workspace -->
     <main class="main-chat-area">
       <!-- Chat Header -->
       <header class="chat-header">
         <div class="chat-header-info">
           <div class="status-dot"></div>
           <div>
-            <div class="header-title">CollegeAssist AI Assistant</div>
-            <div class="header-subtitle">Retrieval-Augmented Generation • Source Citations Enabled</div>
+            <div class="header-title">CollegeAssist AI - RAG Campus Knowledge System</div>
+            <div class="header-subtitle">Retrieval-Augmented Generation • Official College Source Citations</div>
           </div>
         </div>
         <div class="header-actions">
           <button class="btn-secondary" onclick="exportChatTranscript()">
-            📥 Export Transcript
+            📥 Export Report
           </button>
         </div>
       </header>
@@ -97,20 +97,20 @@
       <!-- RAG Active Status Bar -->
       <div class="rag-status-bar">
         <div class="rag-status-info">
-          <span>🔍</span> RAG Source Mode: Official College Knowledge Base (PDFs, Notices, Handbooks, Regulations)
+          <span>🏛️</span> Active Assistant: <strong>CollegeAssist AI</strong> (RAG Source Mode: Admissions, Fees, Exams, Hostels, Placements)
         </div>
-        <div>Indexed Documents: 7 Chunks</div>
+        <div>7 Documents Indexed</div>
       </div>
 
-      <!-- Chat Stream -->
+      <!-- Chat Messages Area -->
       <div class="chat-messages" id="chatMessages">
-        <!-- Welcome Banner -->
+        <!-- Welcome Card -->
         <div class="welcome-card" id="welcomeCard">
           <h2 class="welcome-title">Welcome to CollegeAssist AI 🏛️</h2>
-          <p class="welcome-desc">Your intelligent campus assistant. Ask questions about admissions, fees, academic calendars, examination rules, hostel regulations, or placement criteria.</p>
+          <p class="welcome-desc">Your official campus assistant. Ask questions about college admissions, fee structures, academic calendars, examination rules, hostel regulations, or placement criteria.</p>
           
           <div class="disclaimer-pill">
-            <span>🛡️</span> All responses are generated directly from verified college documents with explicit source citations.
+            <span>🛡️</span> Source of Truth: All answers are generated directly from verified college documents with page citations.
           </div>
 
           <div class="quick-prompts-grid">
@@ -141,13 +141,13 @@
         </div>
       </div>
 
-      <!-- Input Footer -->
+      <!-- Chat Input Area -->
       <footer class="chat-input-area">
         <div class="input-wrapper">
           <textarea 
             id="chatInput" 
             class="chat-input" 
-            placeholder="Ask CollegeAssist AI anything about the college... (e.g., 'What documents are needed for admission?')"
+            placeholder="Ask CollegeAssist AI anything about the college... (e.g., 'What documents are required for admission?')"
             rows="1"
           ></textarea>
           <button class="send-btn" id="sendBtn" title="Send message">
@@ -155,13 +155,13 @@
           </button>
         </div>
         <div class="input-hint">
-          Source of Truth: Official College Knowledge Base. Missing info is flagged automatically.
+          Source of Truth: Official College Knowledge Base. Missing information is flagged automatically.
         </div>
       </footer>
     </main>
   </div>
 
-  <!-- RAG Knowledge Base Inspector Modal -->
+  <!-- Document Knowledge Base Modal -->
   <div class="modal-overlay" id="docsModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -170,15 +170,15 @@
       </div>
       <div class="modal-body">
         <button class="btn-secondary" style="margin-bottom: 16px;" onclick="handleCustomDocUpload()">
-          ➕ Ingest New College Document / Notice
+          ➕ Ingest New College Notice / Document
         </button>
         <div id="modalChunkContainer">
-          <!-- Rendered in app.js -->
+          <!-- Rendered via app.js -->
         </div>
       </div>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2.0"></script>
 </body>
 </html>

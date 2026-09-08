@@ -1,244 +1,145 @@
 /**
- * HealthEduBot - AI-Powered Health Education Assistant
- * Adheres strictly to HealthEduBot System Prompt Rules & Response Specifications.
+ * CollegeAssist AI - RAG Knowledge Engine & Assistant
+ * Adheres strictly to CollegeAssist AI System Prompt & RAG Rules.
  */
 
-// Health Education Knowledge Repository
-const HEALTH_KNOWLEDGE = [
+// Official College Knowledge Base (Document Chunks)
+const COLLEGE_KNOWLEDGE_BASE = [
   {
-    id: "diabetes",
-    keywords: ["diabetes", "sugar", "blood sugar", "glucose", "insulin", "type 1", "type 2", "hyperglycemia"],
-    title: "Diabetes Mellitus",
-    category: "Chronic Conditions",
-    icon: "🩸",
-    whatItIs: "Diabetes is a chronic metabolic condition in which blood glucose (blood sugar) levels become too high because the body either does not produce enough insulin, cannot use insulin effectively, or both.",
-    symptoms: [
-      "Increased thirst (polydipsia) and frequent urination (polyuria)",
-      "Unexplained weight loss and constant hunger",
-      "Fatigue and extreme tiredness",
-      "Blurred vision",
-      "Slow-healing cuts or frequent infections",
-      "Tingling or numbness in hands or feet"
-    ],
-    causes: [
-      "Type 1: Autoimmune response destroying insulin-producing beta cells in the pancreas.",
-      "Type 2: Insulin resistance linked to genetics, lifestyle, physical inactivity, and excess weight.",
-      "Gestational Diabetes: Hormonal changes during pregnancy causing temporary insulin resistance."
-    ],
-    prevention: [
-      "Maintain a balanced diet rich in whole grains, fiber, lean proteins, and low in refined sugars.",
-      "Engage in regular physical exercise (at least 150 minutes of moderate activity weekly).",
-      "Maintain a healthy body weight and monitor blood pressure and lipid levels.",
-      "Avoid tobacco smoking and limit excessive alcohol intake."
-    ],
-    seekHelp: [
-      "Experiencing symptoms of extremely high blood sugar (confusion, rapid breathing, fruity breath odor).",
-      "Experiencing low blood sugar episodes (shakiness, cold sweat, dizziness).",
-      "Have persistent unhealed sores or leg pain.",
-      "Desire routine screening for diabetes risk factors."
+    id: "adm_01",
+    docName: "Admission Guidelines 2026–27",
+    page: 2,
+    date: "2026-03-01",
+    category: "Admissions",
+    keywords: ["admission", "documents", "eligibility", "apply", "application", "certificate", "requirements"],
+    content: "Required Documents for Admission 2026–27: All prospective undergraduate and postgraduate candidates must submit: 1. Class 10 Marks Sheet & Passing Certificate, 2. Class 12 (or equivalent) Marks Sheet, 3. Transfer Certificate (TC) & Migration Certificate, 4. 4 Passport-size photographs, 5. Government-issued ID (Aadhaar / Passport / Voter ID), 6. Entrance Exam Scorecard (where applicable).",
+    answer: "According to the official admission guidelines, students are required to submit their Class 10 & 12 certificates, Transfer Certificate, passport-size photographs, government-issued ID, and entrance scorecard.",
+    details: [
+      "Class 10 & Class 12 Original Marks Sheets and Passing Certificates.",
+      "Transfer Certificate (TC) and Migration Certificate from previous institution.",
+      "4 recent passport-size colored photographs.",
+      "Valid Government-issued Identification (Aadhaar Card, Passport, or Voter ID).",
+      "Entrance Exam Scorecard (JEE / GATE / State Entrance as applicable)."
     ]
   },
   {
-    id: "hypertension",
-    keywords: ["hypertension", "high blood pressure", "bp", "systolic", "diastolic", "pressure"],
-    title: "Hypertension (High Blood Pressure)",
-    category: "Cardiovascular Health",
-    icon: "❤️",
-    whatItIs: "Hypertension is a common medical condition where the long-term force of blood against your artery walls is consistently too high, putting increased strain on your heart and blood vessels.",
-    symptoms: [
-      "Often called a 'silent killer' because it usually has no obvious symptoms.",
-      "In severe cases: Headaches, shortness of breath, nosebleeds, or dizziness may occur."
-    ],
-    causes: [
-      "Primary (essential) hypertension: Develops gradually over time with no single identifiable cause.",
-      "Secondary hypertension: Caused by underlying conditions like kidney disease, thyroid disorders, or medication side effects.",
-      "Contributing factors include high sodium diet, stress, obesity, lack of exercise, and family history."
-    ],
-    prevention: [
-      "Adopt a heart-healthy diet (such as the DASH diet) low in sodium and rich in potassium.",
-      "Maintain regular physical aerobic exercise.",
-      "Manage stress through mindfulness, adequate sleep, and relaxation techniques.",
-      "Limit alcohol consumption and refrain from smoking."
-    ],
-    seekHelp: [
-      "Severe headache accompanied by chest pain, vision changes, or confusion (seek emergency care).",
-      "Routine blood pressure readings consistently exceed 130/80 mmHg.",
-      "Side effects experienced from blood pressure management routine."
+    id: "adm_02",
+    docName: "Admission Notice - Deadline Extension",
+    page: 1,
+    date: "2026-05-15", // Newer notice overriding older June 15 notice
+    category: "Admissions",
+    keywords: ["admission deadline", "last date", "closing date", "admissions close", "when do admissions close"],
+    content: "Notice Ref #ADM/2026/08: The deadline for submitting undergraduate online applications has been extended to June 30, 2026 (overriding the previously announced date of June 15).",
+    answer: "Admissions for the upcoming academic session close on June 30, 2026.",
+    details: [
+      "Online portal closing date: June 30, 2026.",
+      "Note: This reflects the latest official notice (Ref #ADM/2026/08), which extended the earlier June 15 deadline."
     ]
   },
   {
-    id: "sleep_hygiene",
-    keywords: ["sleep", "insomnia", "tired", "rest", "circadian", "sleep hygiene", "sleeping"],
-    title: "Sleep Hygiene & Quality Rest",
-    category: "Wellness & Lifestyle",
-    icon: "🌙",
-    whatItIs: "Sleep hygiene refers to safe, evidence-based behavioral practices and environmental habits that foster consistent, high-quality, restorative sleep necessary for physical and cognitive health.",
-    symptoms: [
-      "Difficulty falling asleep or staying asleep through the night",
-      "Waking up feeling unrefreshed or exhausted during the day",
-      "Daytime drowsiness, brain fog, or irritability"
-    ],
-    causes: [
-      "Irregular sleep schedule and shift work",
-      "Excessive exposure to blue light from screens before bedtime",
-      "Caffeine, heavy meals, or alcohol close to bedtime",
-      "High stress levels, anxiety, or noisy environment"
-    ],
-    prevention: [
-      "Maintain a consistent sleep and wake-up schedule, even on weekends.",
-      "Create a dark, quiet, cool, and comfortable bedroom environment.",
-      "Avoid screens (phones, tablets, TV) for 30–60 minutes before bed.",
-      "Limit caffeine intake in the afternoon and evening hours."
-    ],
-    seekHelp: [
-      "Chronic insomnia lasting longer than 3–4 weeks.",
-      "Loud snoring accompanied by gasping or pauses in breathing during sleep (possible sleep apnea).",
-      "Excessive daytime sleepiness interfering with safe driving or daily activities."
+    id: "fee_01",
+    docName: "Fee Structure & Regulations 2026–27",
+    page: 3,
+    date: "2026-01-10",
+    category: "Fees",
+    keywords: ["tuition fee", "fee structure", "fees", "cost", "examination fee", "semester fee", "hostel fee"],
+    content: "Approved College Fee Structure 2026–27: 1. B.Tech Tuition Fee: $1,200 (₹45,000) per semester. 2. Examination Fee: $50 (₹2,500) per semester. 3. Hostel Fee (Occupancy + Mess): $600 (₹28,000) per semester. 4. Library & Lab Security Deposit (Refundable): $100 (₹5,000) one-time at admission.",
+    answer: "The fee structure for the 2026–27 academic year includes tuition, examination, hostel, and lab/library security deposits.",
+    details: [
+      "B.Tech Tuition Fee: ₹45,000 per semester.",
+      "Examination Fee: ₹2,500 per semester.",
+      "Hostel Fee (including mess charges): ₹28,000 per semester.",
+      "Refundable Library & Laboratory Deposit: ₹5,000 (one-time upon admission)."
     ]
   },
   {
-    id: "first_aid_burns",
-    keywords: ["burn", "burns", "scald", "heat burn", "fire", "hot water", "first aid burn"],
-    title: "First Aid for Minor Thermal Burns",
-    category: "Basic First Aid",
-    icon: "🩹",
-    whatItIs: "First aid for minor burns involves immediate basic care for first-degree and mild second-degree burns affecting only the outer layer of skin (epidermis).",
-    symptoms: [
-      "Redness and localized mild swelling",
-      "Pain or tenderness at the burn site",
-      "Small fluid-filled blisters (in minor second-degree burns)"
-    ],
-    causes: [
-      "Contact with hot liquids or steam (scalding)",
-      "Direct contact with hot objects (irons, stoves, pots)",
-      "Sunburn or mild electrical contact"
-    ],
-    prevention: [
-      "Cool the burn immediately under cool running tap water for 10–15 minutes. (Do NOT use ice).",
-      "Apply a clean, non-stick sterile bandage or dry cloth lightly over the area.",
-      "Do NOT pop blisters or apply butter, oil, or toothpaste to the wound.",
-      "Keep the area clean and hydrated with pure aloe vera or petroleum jelly if skin is intact."
-    ],
-    seekHelp: [
-      "Burn covers a large area (larger than the palm of your hand) or involves the face, hands, feet, major joints, or groin.",
-      "Burn is charred black, white, or leathery (3rd-degree burn - emergency).",
-      "Signs of infection develop: increased redness, swelling, pus, or fever."
+    id: "acad_01",
+    docName: "Academic Calendar 2026–27",
+    page: 4,
+    date: "2026-02-01",
+    category: "Academic",
+    keywords: ["academic calendar", "semester start", "midterm", "end sem", "holiday", "schedule", "working days"],
+    content: "Academic Calendar 2026–27: Fall Semester commences on August 1, 2026. Mid-semester internal evaluations: October 12–17, 2026. End-semester final examinations begin on December 1, 2026. Winter break: December 20, 2026 to January 5, 2027.",
+    answer: "According to the Academic Calendar 2026–27, the Fall semester begins on August 1, 2026, with end-semester exams scheduled for December 1, 2026.",
+    details: [
+      "Semester Commencement: August 1, 2026.",
+      "Mid-Semester Internal Examinations: October 12–17, 2026.",
+      "End-Semester Final Examinations: December 1, 2026.",
+      "Winter Vacation: December 20, 2026 – January 5, 2027."
     ]
   },
   {
-    id: "nutrition_basics",
-    keywords: ["nutrition", "diet", "food", "vitamins", "minerals", "calories", "protein", "eating"],
-    title: "Balanced Nutrition & Healthy Eating",
-    category: "Nutrition",
-    icon: "🥗",
-    whatItIs: "Balanced nutrition involves consuming a diverse variety of nutrient-dense foods to provide the body with essential macronutrients (carbohydrates, proteins, fats) and micronutrients (vitamins and minerals).",
-    symptoms: [
-      "Poor nutrition can cause fatigue, weak immunity, hair thinning, digestive distress, or low mood."
-    ],
-    causes: [
-      "Diets high in ultra-processed foods, added sugars, and saturated fats.",
-      "Lack of fresh vegetables, fruits, whole grains, and lean protein sources."
-    ],
-    prevention: [
-      "Fill half your plate with colorful vegetables and fruits.",
-      "Choose whole grains (brown rice, oats, quinoa) over refined grains.",
-      "Include lean protein sources (beans, lentils, fish, poultry, tofu).",
-      "Stay hydrated by drinking plenty of water throughout the day."
-    ],
-    seekHelp: [
-      "Experiencing unexplained severe weight loss or weight gain.",
-      "Digestive issues lasting several weeks.",
-      "Need personalized dietary plans for medical conditions like renal or celiac disease."
+    id: "exam_01",
+    docName: "Examination Regulations & Rules 2026",
+    page: 5,
+    date: "2026-01-20",
+    category: "Examinations",
+    keywords: ["exam rules", "hall ticket", "attendance eligibility", "passing marks", "malpractice", "rules"],
+    content: "College Examination Regulations: 1. Minimum 75% attendance in each course is required to be eligible for hall ticket issuance. 2. Students must carry their official College ID Card and printed Hall Ticket to the examination hall. 3. Electronic gadgets (mobile phones, smartwatches, programmable calculators) are strictly prohibited. 4. Passing mark is 40% in theory and 50% in practical evaluations.",
+    answer: "Students must maintain a minimum of 75% attendance to receive their hall ticket and carry their official college ID during exams.",
+    details: [
+      "Attendance Requirement: Minimum 75% attendance in each subject is mandatory.",
+      "Hall Ticket & ID: Printed Hall Ticket and College Student ID Card required at every exam session.",
+      "Prohibited Items: Mobile phones, smartwatches, and unauthorized electronics strictly forbidden.",
+      "Passing Threshold: Minimum 40% in theory exams and 50% in practical evaluations."
     ]
   },
   {
-    id: "headache",
-    keywords: ["headache", "migraine", "tension headache", "head pain", "temples"],
-    title: "Headaches & Tension Relief",
-    category: "Common Ailments",
-    icon: "🧠",
-    whatItIs: "Headaches involve pain or discomfort in the head or scalp region. Most common headaches are primary headaches, such as tension headaches or migraines.",
-    symptoms: [
-      "Dull, aching pain around the forehead or back of head (tension headache)",
-      "Throbbing pain on one or both sides of the head (migraine)",
-      "Sensitivity to light, sound, or nausea during severe episodes"
-    ],
-    causes: [
-      "Dehydration, hunger, or muscle tension in the neck and shoulders.",
-      "Lack of sleep, eye strain from screens, or stress.",
-      "Hormonal fluctuations or environmental triggers (bright light, loud noise)."
-    ],
-    prevention: [
-      "Stay well-hydrated throughout the day.",
-      "Practice good screen ergonomics and take regular eye breaks (20-20-20 rule).",
-      "Maintain a regular sleep schedule and eat consistent meals.",
-      "Apply cool or warm compresses to the forehead or neck area."
-    ],
-    seekHelp: [
-      "Sudden, extremely severe headache ('thunderclap headache') - Seek immediate emergency medical care.",
-      "Headache following a head injury or accompanied by fever, stiff neck, confusion, or weakness.",
-      "Headaches that progressively worsen over days or change in character."
+    id: "hostel_01",
+    docName: "Hostel Information & Rules Handbook",
+    page: 2,
+    date: "2026-02-15",
+    category: "Hostels",
+    keywords: ["hostel", "room", "curfew", "mess", "facility", "hostel rules", "warden"],
+    content: "Hostel Regulations: 1. Night Curfew Timing: 9:30 PM for all resident students. 2. Mess timing: Breakfast 7:30–9:00 AM, Lunch 12:30–2:00 PM, Dinner 7:30–9:00 PM. 3. Wi-Fi high-speed internet available 24/7 in study lounges. 4. Visitors are permitted only in the ground-floor visitor lounge between 4:00 PM and 7:00 PM.",
+    answer: "Hostel residents must adhere to the 9:30 PM night curfew and follow designated mess and visitor hours.",
+    details: [
+      "Night Curfew: 9:30 PM for all undergraduate hostels.",
+      "Mess Hours: Breakfast (7:30–9:00 AM), Lunch (12:30–2:00 PM), Dinner (7:30–9:00 PM).",
+      "Visitor Policy: Allowed only in the visitor lounge from 4:00 PM to 7:00 PM.",
+      "Facilities: 24/7 high-speed Wi-Fi, study room access, and laundry service."
     ]
   },
   {
-    id: "cold_vs_flu",
-    keywords: ["cold", "flu", "influenza", "fever", "runny nose", "cough", "sneezing", "virus"],
-    title: "Common Cold vs. Influenza (Flu)",
-    category: "Infectious Diseases",
-    icon: "🤧",
-    whatItIs: "Both common colds and the flu are contagious respiratory illnesses caused by viruses, but flu is caused by influenza viruses and is generally more intense.",
-    symptoms: [
-      "Cold: Gradual onset, runny/stuffy nose, mild sore throat, sneezing, mild cough.",
-      "Flu: Abrupt onset, high fever, severe body aches, chills, extreme fatigue, dry cough."
-    ],
-    causes: [
-      "Rhino viruses and other respiratory viruses cause common colds.",
-      "Influenza A and B viruses cause seasonal flu.",
-      "Spreads through airborne droplets or contact with contaminated surfaces."
-    ],
-    prevention: [
-      "Wash hands frequently with soap and water for at least 20 seconds.",
-      "Get an annual seasonal flu vaccination.",
-      "Cover coughs and sneezes with an elbow or tissue.",
-      "Stay home when feeling unwell to prevent spreading illness to others."
-    ],
-    seekHelp: [
-      "Difficulty breathing or shortness of breath.",
-      "Persistent high fever that does not respond to cooling measures.",
-      "Symptoms that improve but then return with worse fever and cough.",
-      "Symptoms in high-risk individuals (infants, elderly, immunocompromised)."
+    id: "place_01",
+    docName: "Placement Cell Guidelines 2026",
+    page: 3,
+    date: "2026-04-05",
+    category: "Placements",
+    keywords: ["placement", "jobs", "companies", "cgpa", "training", "recruitment", "internship", "campus placement"],
+    content: "Training & Placement Cell Rules: 1. Minimum 6.5 CGPA with no active backlogs required for Phase-1 campus recruitment drives. 2. Student registration on the placement portal is mandatory prior to resume submission. 3. Attendance at pre-placement talks (PPT) is compulsory for registered candidates. 4. Highest package recorded last season: $42,000 (₹32 LPA); Average package: $9,500 (₹7.2 LPA).",
+    answer: "Eligibility for Phase-1 campus placement requires a minimum 6.5 CGPA with no active backlogs.",
+    details: [
+      "Eligibility Criteria: 6.5 CGPA minimum and zero active backlogs.",
+      "Mandatory Registration: Must register on Placement Portal before applying to companies.",
+      "Placement Statistics: Highest salary package ₹32 LPA; Average salary package ₹7.2 LPA.",
+      "Top Recruiting Sectors: Software engineering, data analytics, core engineering, and consulting."
     ]
   }
 ];
 
-// Emergency Red-Flag Keywords
-const EMERGENCY_KEYWORDS = [
-  "chest pain", "severe chest pressure", "shortness of breath", "can't breathe", "cannot breathe",
-  "difficulty breathing", "unconscious", "passed out", "fainted", "severe bleeding", "heavy bleeding",
-  "stroke", "facial drooping", "arm weakness", "slurred speech", "seizure", "seizures", "convulsions",
-  "choking", "poison", "poisoning", "suicide", "self-harm", "anaphylaxis", "severe allergic reaction"
+// Ambiguous Keywords List (triggers clarifying questions)
+const AMBIGUOUS_TRIGGERS = [
+  { keyword: "exams", clarification: "Sure. Are you asking about the exam timetable, examination rules, registration eligibility, or results?" },
+  { keyword: "exam", clarification: "Sure. Are you asking about the examination timetable, attendance rules, hall ticket issuance, or passing marks?" },
+  { keyword: "fees", clarification: "I can help with fees. Are you looking for tuition fees, examination fees, hostel fees, or security deposits?" },
+  { keyword: "fee", clarification: "I can help with fees. Are you looking for tuition fees, examination fees, hostel fees, or security deposits?" },
+  { keyword: "hostel", clarification: "Are you inquiring about hostel room fees, night curfew timings, mess hours, or visitor rules?" },
+  { keyword: "admission", clarification: "Are you asking about required admission documents, application procedures, eligibility criteria, or important deadlines?" }
 ];
 
-// Medication Prescription Trigger Keywords
-const PRESCRIPTION_KEYWORDS = [
-  "prescribe", "what antibiotic", "what medication should i take", "dose", "dosage", 
-  "what medicine to take", "give me a prescription", "how many pills"
-];
+// Standard Missing Info Fallback Text
+const UNKNOWN_INFO_FALLBACK = "I couldn't find this information in the available college documents. Please check with the relevant college department or official notice.";
 
-// Diagnosis Seeking Trigger Keywords
-const DIAGNOSIS_KEYWORDS = [
-  "diagnose me", "do i have cancer", "tell me if i have", "do i definitely have", "is this definitely"
-];
-
-// State variables
+// State Management
+let customKnowledgeBase = [...COLLEGE_KNOWLEDGE_BASE];
 let chatHistory = [];
 let currentTheme = localStorage.getItem("theme") || "light";
 
-// Initialize App
+// Initialize Application
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
-  renderPresetTopics();
-  renderTopicExplorer();
+  renderKnowledgeBaseSidebar();
   setupEventListeners();
   loadSavedChat();
 });
@@ -260,62 +161,37 @@ function updateThemeIcon() {
   const iconBtn = document.getElementById("themeToggleBtn");
   if (iconBtn) {
     iconBtn.innerHTML = currentTheme === "light" ? "🌙" : "☀️";
-    iconBtn.setAttribute("title", currentTheme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode");
   }
 }
 
-// Preset Topics in Sidebar
-function renderPresetTopics() {
-  const container = document.getElementById("presetTopicsContainer");
+// Render Documents in Sidebar
+function renderKnowledgeBaseSidebar() {
+  const container = document.getElementById("docListContainer");
   if (!container) return;
 
-  container.innerHTML = HEALTH_KNOWLEDGE.map(topic => `
-    <button class="topic-btn" onclick="selectTopic('${topic.id}')">
-      <span class="topic-icon">${topic.icon}</span>
-      <span>${topic.title}</span>
-    </button>
-  `).join("");
-}
-
-// Topic Explorer Modal List
-function renderTopicExplorer(filter = "") {
-  const container = document.getElementById("topicGridContainer");
-  if (!container) return;
-
-  const filtered = HEALTH_KNOWLEDGE.filter(t => 
-    t.title.toLowerCase().includes(filter.toLowerCase()) || 
-    t.category.toLowerCase().includes(filter.toLowerCase()) ||
-    t.whatItIs.toLowerCase().includes(filter.toLowerCase())
-  );
-
-  if (filtered.length === 0) {
-    container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No health topics found matching "${filter}".</p>`;
-    return;
-  }
-
-  container.innerHTML = filtered.map(t => `
-    <div class="topic-card-item" onclick="selectTopic('${t.id}')">
-      <div class="topic-card-tag">${t.category}</div>
-      <div style="font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-        <span>${t.icon}</span> ${t.title}
+  container.innerHTML = customKnowledgeBase.map(doc => `
+    <div class="doc-item" onclick="inspectDoc('${doc.id}')">
+      <div class="doc-info">
+        <span class="doc-icon">📄</span>
+        <div>
+          <div class="doc-name">${doc.docName}</div>
+          <div class="doc-pages">Page ${doc.page} • ${doc.category}</div>
+        </div>
       </div>
-      <div style="font-size: 0.8rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-        ${t.whatItIs}
-      </div>
+      <span class="badge-rag">RAG</span>
     </div>
   `).join("");
 }
 
-// Setup Event Listeners
+// Event Listeners
 function setupEventListeners() {
   const chatInput = document.getElementById("chatInput");
   const sendBtn = document.getElementById("sendBtn");
   const themeBtn = document.getElementById("themeToggleBtn");
   const exportBtn = document.getElementById("exportChatBtn");
   const clearBtn = document.getElementById("clearChatBtn");
-  const explorerBtn = document.getElementById("openExplorerBtn");
-  const closeExplorerBtn = document.getElementById("closeExplorerBtn");
-  const searchInput = document.getElementById("topicSearchInput");
+  const openDocsBtn = document.getElementById("openDocsBtn");
+  const closeDocsBtn = document.getElementById("closeDocsBtn");
 
   if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
   
@@ -325,65 +201,25 @@ function setupEventListeners() {
         e.preventDefault();
         handleSendMessage();
       }
-      checkEmergencyInput(chatInput.value);
-    });
-
-    chatInput.addEventListener("input", () => {
-      checkEmergencyInput(chatInput.value);
     });
   }
 
   if (sendBtn) sendBtn.addEventListener("click", handleSendMessage);
   if (exportBtn) exportBtn.addEventListener("click", exportChatTranscript);
   if (clearBtn) clearBtn.addEventListener("click", clearChatHistory);
-  
-  if (explorerBtn) {
-    explorerBtn.addEventListener("click", () => {
-      document.getElementById("explorerModal").classList.add("active");
+
+  if (openDocsBtn) {
+    openDocsBtn.addEventListener("click", () => {
+      document.getElementById("docsModal").classList.add("active");
+      renderModalChunkView();
     });
   }
 
-  if (closeExplorerBtn) {
-    closeExplorerBtn.addEventListener("click", () => {
-      document.getElementById("explorerModal").classList.remove("active");
+  if (closeDocsBtn) {
+    closeDocsBtn.addEventListener("click", () => {
+      document.getElementById("docsModal").classList.remove("active");
     });
   }
-
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => renderTopicExplorer(e.target.value));
-  }
-}
-
-// Check live emergency typing keywords
-function checkEmergencyInput(text) {
-  const lower = text.toLowerCase();
-  const isEmergency = EMERGENCY_KEYWORDS.some(kw => lower.includes(kw));
-  const banner = document.getElementById("emergencyBanner");
-  if (banner) {
-    if (isEmergency) {
-      banner.classList.add("active");
-    } else if (lower.trim() === "") {
-      banner.classList.remove("active");
-    }
-  }
-}
-
-function dismissEmergencyBanner() {
-  const banner = document.getElementById("emergencyBanner");
-  if (banner) banner.classList.remove("active");
-}
-
-// Topic Selection
-function selectTopic(topicId) {
-  const topic = HEALTH_KNOWLEDGE.find(t => t.id === topicId);
-  if (!topic) return;
-
-  const modal = document.getElementById("explorerModal");
-  if (modal) modal.classList.remove("active");
-
-  const query = `What is ${topic.title.toLowerCase()}?`;
-  addUserMessage(query);
-  generateStructuredBotResponse(query, topic);
 }
 
 function fillPrompt(text) {
@@ -391,20 +227,26 @@ function fillPrompt(text) {
   if (input) {
     input.value = text;
     input.focus();
-    checkEmergencyInput(text);
   }
 }
 
-// Handle User Input Submission
+// Inspect specific document in modal
+function inspectDoc(docId) {
+  const doc = customKnowledgeBase.find(d => d.id === docId);
+  if (!doc) return;
+  alert(`📄 [RAG Document Chunk]\nDocument: ${doc.docName} (Page ${doc.page})\nCategory: ${doc.category}\nDate: ${doc.date}\n\nContent:\n${doc.content}`);
+}
+
+// Handle User Message
 function handleSendMessage() {
   const input = document.getElementById("chatInput");
   if (!input) return;
-  const userText = input.value.trim();
-  if (!userText) return;
+  const query = input.value.trim();
+  if (!query) return;
 
   input.value = "";
-  addUserMessage(userText);
-  processUserInput(userText);
+  addUserMessage(query);
+  processRAGQuery(query);
 }
 
 // Add User Message to UI
@@ -416,7 +258,7 @@ function addUserMessage(text) {
   const msgRow = document.createElement("div");
   msgRow.className = "message-row user";
   msgRow.innerHTML = `
-    <div class="avatar user-avatar">👤</div>
+    <div class="avatar user-avatar">🎓</div>
     <div class="message-bubble">${escapeHtml(text)}</div>
   `;
   chatContainer.appendChild(msgRow);
@@ -426,235 +268,150 @@ function addUserMessage(text) {
   saveChatToLocalStorage();
 }
 
-// Process User Query adhering to System Prompt Rules
-function processUserInput(userText) {
-  const lowerText = userText.toLowerCase();
+// Process RAG Query
+function processRAGQuery(query) {
+  const lowerQuery = query.toLowerCase().trim();
   showTypingIndicator();
 
   setTimeout(() => {
     removeTypingIndicator();
 
-    // 1. Check Emergency First
-    const hasEmergency = EMERGENCY_KEYWORDS.some(kw => lowerText.includes(kw));
-    if (hasEmergency) {
-      triggerEmergencyResponse(userText);
+    // 1. Ambiguity check for single word or vague queries
+    const words = lowerQuery.split(/\s+/);
+    if (words.length <= 2) {
+      const ambMatch = AMBIGUOUS_TRIGGERS.find(a => lowerQuery.includes(a.keyword));
+      if (ambMatch) {
+        renderAmbiguityClarification(ambMatch.clarification);
+        return;
+      }
+    }
+
+    // 2. Vector / Keyword Ranking Retrieval over RAG Knowledge Base
+    const matches = customKnowledgeBase.map(doc => {
+      let score = 0;
+      doc.keywords.forEach(kw => {
+        if (lowerQuery.includes(kw)) score += 3;
+      });
+      // Word overlap score
+      words.forEach(w => {
+        if (w.length > 3 && doc.content.toLowerCase().includes(w)) score += 1;
+      });
+      return { doc, score };
+    }).filter(m => m.score > 0)
+      .sort((a, b) => b.score - a.score);
+
+    if (matches.length === 0) {
+      renderUnknownFallback();
       return;
     }
 
-    // 2. Check Prescription / Medication request
-    const isPrescriptionReq = PRESCRIPTION_KEYWORDS.some(kw => lowerText.includes(kw));
-    if (isPrescriptionReq) {
-      triggerPrescriptionSafetyResponse(userText);
-      return;
+    // Pick top matched document
+    // If multiple documents match, prefer newest date if version available
+    let topMatch = matches[0].doc;
+    if (matches.length > 1 && matches[1].score === matches[0].score) {
+      if (new Date(matches[1].doc.date) > new Date(matches[0].doc.date)) {
+        topMatch = matches[1].doc;
+      }
     }
 
-    // 3. Check Diagnosis seeking request
-    const isDiagnosisReq = DIAGNOSIS_KEYWORDS.some(kw => lowerText.includes(kw));
-    if (isDiagnosisReq) {
-      triggerDiagnosisSafetyResponse(userText);
-      return;
-    }
-
-    // 4. Topic Matching or General Educational Response
-    const matchedTopic = HEALTH_KNOWLEDGE.find(t => 
-      t.keywords.some(kw => lowerText.includes(kw))
-    );
-
-    if (matchedTopic) {
-      generateStructuredBotResponse(userText, matchedTopic);
-    } else {
-      generateGeneralHealthResponse(userText);
-    }
-  }, 750);
+    renderRAGStructuredResponse(topMatch);
+  }, 700);
 }
 
-// Emergency Response Generator
-function triggerEmergencyResponse(userText) {
-  const responseData = {
-    title: "EMERGENCY MEDICAL WARNING",
-    isEmergency: true,
-    whatItIs: "Based on the symptoms mentioned (such as chest pain, breathing difficulty, or severe distress), this may indicate a critical medical emergency.",
-    symptoms: [
-      "Severe chest pain or pressure spreading to arms, neck, or jaw",
-      "Sudden difficulty breathing or inability to catch breath",
-      "Sudden weakness, numbness, or loss of speech/consciousness",
-      "Severe uncontrolled bleeding or traumatic injury"
-    ],
-    causes: [
-      "Emergency symptoms require immediate medical evaluation by emergency physicians to determine the cause (e.g., cardiac event, respiratory distress, acute stroke)."
-    ],
-    prevention: [
-      "Do NOT wait or attempt self-treatment.",
-      "Call your local emergency services (e.g., 911, 112, or 999) immediately.",
-      "If you are alone, unlock the front door and inform a family member or neighbor."
-    ],
-    seekHelp: [
-      "IMMEDIATE EMERGENCY CARE REQUIRED. Contact emergency medical services without delay."
-    ]
-  };
-
-  renderBotStructuredMessage(responseData);
+// Ambiguity Clarification Response
+function renderAmbiguityClarification(questionText) {
+  const chatContainer = document.getElementById("chatMessages");
+  const msgRow = document.createElement("div");
+  msgRow.className = "message-row bot";
   
-  // Also show top banner
-  const banner = document.getElementById("emergencyBanner");
-  if (banner) banner.classList.add("active");
+  msgRow.innerHTML = `
+    <div class="avatar bot-avatar">🏛️</div>
+    <div class="message-bubble">
+      <div style="font-weight: 600; margin-bottom: 6px;">CollegeAssist AI Clarification:</div>
+      <p>${questionText}</p>
+    </div>
+  `;
+
+  chatContainer.appendChild(msgRow);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  chatHistory.push({ role: "bot", text: questionText, timestamp: new Date().toISOString() });
+  saveChatToLocalStorage();
 }
 
-// Prescription Safety Refusal Generator
-function triggerPrescriptionSafetyResponse(userText) {
-  const responseData = {
-    title: "Medication & Prescription Information Notice",
-    whatItIs: "HealthEduBot provides general health educational information only and CANNOT prescribe medications, recommend dosages, or change prescribed treatments.",
-    symptoms: [
-      "Prescription medications (such as antibiotics, blood pressure drugs, or pain relievers) require individual medical evaluation."
-    ],
-    causes: [
-      "Medication suitability depends on your exact diagnosis, medical history, allergies, kidney/liver function, and potential drug interactions."
-    ],
-    prevention: [
-      "Always consult a licensed pharmacist or prescribing physician before starting, stopping, or altering any medication.",
-      "Keep an updated list of all medications and supplements you take.",
-      "Store medications safely as directed on package labels."
-    ],
-    seekHelp: [
-      "Speak with a doctor or registered pharmacist to receive prescription recommendations tailored to your medical history."
-    ]
-  };
+// Unknown Information Fallback (Strict rule)
+function renderUnknownFallback() {
+  const chatContainer = document.getElementById("chatMessages");
+  const msgRow = document.createElement("div");
+  msgRow.className = "message-row bot";
 
-  renderBotStructuredMessage(responseData);
+  msgRow.innerHTML = `
+    <div class="avatar bot-avatar">🏛️</div>
+    <div class="message-bubble">
+      <div class="rag-response-format">
+        <div class="rag-section fallback-section">
+          <div class="rag-section-title">
+            <span>ℹ️</span> Document Search Result:
+          </div>
+          <div class="rag-section-content">
+            ${UNKNOWN_INFO_FALLBACK}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  chatContainer.appendChild(msgRow);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  chatHistory.push({ role: "bot", text: UNKNOWN_INFO_FALLBACK, timestamp: new Date().toISOString() });
+  saveChatToLocalStorage();
 }
 
-// Diagnosis Safety Refusal Generator
-function triggerDiagnosisSafetyResponse(userText) {
-  const responseData = {
-    title: "Medical Assessment & Diagnosis Guidelines",
-    whatItIs: "HealthEduBot is an educational tool and does NOT diagnose diseases or give definitive medical diagnoses based on reported symptoms.",
-    symptoms: [
-      "Many symptoms can overlap across multiple benign or significant health conditions."
-    ],
-    causes: [
-      "A proper diagnosis requires clinical examination, physical assessment, lab tests, or diagnostic imaging performed by a qualified doctor."
-    ],
-    prevention: [
-      "Keep a log of when your symptoms started, their severity, and what makes them better or worse.",
-      "Prepare questions to discuss during your doctor's appointment."
-    ],
-    seekHelp: [
-      "Schedule a consultation with a qualified primary care physician or specialist for personalized medical diagnosis."
-    ]
-  };
-
-  renderBotStructuredMessage(responseData);
-}
-
-// Generate Structured Bot Response using matched topic
-function generateStructuredBotResponse(userText, topic) {
-  renderBotStructuredMessage(topic);
-}
-
-// General Health Educational Fallback (Synthesizer adhering strictly to prompt structure)
-function generateGeneralHealthResponse(userText) {
-  const topicTitle = userText.charAt(0).toUpperCase() + userText.slice(1);
-  const responseData = {
-    title: topicTitle,
-    whatItIs: `HealthEduBot general education overview for: "${escapeHtml(userText)}". This refers to a general wellness or body query topic.`,
-    symptoms: [
-      "Symptoms can vary significantly depending on individual baseline health, age, and underlying factors.",
-      "Common indicators may include mild discomfort, fatigue, or localized changes."
-    ],
-    causes: [
-      "There are several possible causes for these health observations, ranging from minor lifestyle factors (diet, hydration, stress) to specific medical conditions.",
-      "A healthcare professional can evaluate these factors properly."
-    ],
-    prevention: [
-      "Maintain safe, evidence-based healthy habits: balanced nutrition, adequate sleep (7–9 hours), regular physical exercise, and stress management.",
-      "Stay hydrated and maintain routine health checkups with your doctor."
-    ],
-    seekHelp: [
-      "Consult a qualified doctor if symptoms are persistent, severe, or interfere with daily activities.",
-      "Seek emergency care if symptoms occur suddenly with severe pain, high fever, or breathing difficulty."
-    ]
-  };
-
-  renderBotStructuredMessage(responseData);
-}
-
-// Render Structured Message to UI adhering to Recommended Response Structure
-function renderBotStructuredMessage(data) {
+// Render RAG Structured Response (Answer, Details, Source)
+function renderRAGStructuredResponse(doc) {
   const chatContainer = document.getElementById("chatMessages");
   const msgRow = document.createElement("div");
   msgRow.className = "message-row bot";
 
   const msgId = "msg-" + Date.now();
 
-  const isEmergency = data.isEmergency;
-
   msgRow.innerHTML = `
-    <div class="avatar bot-avatar">🩺</div>
+    <div class="avatar bot-avatar">🏛️</div>
     <div class="message-bubble" id="${msgId}">
-      <div class="structured-response">
+      <div class="rag-response-format">
         
-        <!-- What it is -->
-        <div class="response-section ${isEmergency ? 'emergency-sec' : ''}">
-          <div class="section-header">
-            <span>📌</span> What it is:
+        <!-- Answer -->
+        <div class="rag-section">
+          <div class="rag-section-title">
+            <span>💡</span> Answer:
           </div>
-          <div class="section-body">${data.whatItIs}</div>
+          <div class="rag-section-content">
+            ${doc.answer}
+          </div>
         </div>
 
-        <!-- Common symptoms -->
-        <div class="response-section">
-          <div class="section-header">
-            <span>🩺</span> Common symptoms:
+        <!-- Details -->
+        <div class="rag-section">
+          <div class="rag-section-title">
+            <span>📋</span> Details:
           </div>
-          <div class="section-body">
+          <div class="rag-section-content">
             <ul>
-              ${data.symptoms.map(s => `<li>${s}</li>`).join("")}
+              ${doc.details.map(d => `<li>${d}</li>`).join("")}
             </ul>
           </div>
         </div>
 
-        <!-- Possible causes -->
-        <div class="response-section">
-          <div class="section-header">
-            <span>🔍</span> Possible causes:
+        <!-- Source -->
+        <div class="rag-section source-section">
+          <div class="rag-section-title">
+            <span>📄</span> Source:
           </div>
-          <div class="section-body">
-            <ul>
-              ${data.causes.map(c => `<li>${c}</li>`).join("")}
-            </ul>
-          </div>
-        </div>
-
-        <!-- Prevention / Healthy habits -->
-        <div class="response-section">
-          <div class="section-header">
-            <span>🌿</span> Prevention / Healthy habits:
-          </div>
-          <div class="section-body">
-            <ul>
-              ${data.prevention.map(p => `<li>${p}</li>`).join("")}
-            </ul>
-          </div>
-        </div>
-
-        <!-- When to seek medical help -->
-        <div class="response-section ${isEmergency ? 'emergency-sec' : 'warning-sec'}">
-          <div class="section-header">
-            <span>🚨</span> When to seek medical help:
-          </div>
-          <div class="section-body">
-            <ul>
-              ${data.seekHelp.map(h => `<li>${h}</li>`).join("")}
-            </ul>
-          </div>
-        </div>
-
-        <!-- Important Disclaimer -->
-        <div class="disclaimer-box">
-          <span class="disclaimer-icon">⚠️</span>
-          <div>
-            <strong>Important:</strong> This chatbot provides general health education and cannot diagnose or treat medical conditions. Always consult a qualified doctor or healthcare professional for personalized medical advice.
+          <div class="rag-section-content">
+            <span class="source-badge-tag">
+              📌 ${doc.docName}, Page ${doc.page} (Updated: ${doc.date})
+            </span>
           </div>
         </div>
 
@@ -677,20 +434,20 @@ function renderBotStructuredMessage(data) {
 
   chatHistory.push({
     role: "bot",
-    data,
+    doc,
     timestamp: new Date().toISOString()
   });
   saveChatToLocalStorage();
 }
 
-// Typing Indicator UI
+// Typing Indicator
 function showTypingIndicator() {
   const chatContainer = document.getElementById("chatMessages");
   const indicator = document.createElement("div");
   indicator.id = "typingIndicator";
   indicator.className = "message-row bot";
   indicator.innerHTML = `
-    <div class="avatar bot-avatar">🩺</div>
+    <div class="avatar bot-avatar">🏛️</div>
     <div class="message-bubble" style="padding: 10px 16px;">
       <div class="typing-dots">
         <div class="typing-dot"></div>
@@ -708,44 +465,77 @@ function removeTypingIndicator() {
   if (indicator) indicator.remove();
 }
 
-// Speech Synthesis (Text-to-Speech)
+// Document Uploading Ingestion in Modal
+function renderModalChunkView() {
+  const container = document.getElementById("modalChunkContainer");
+  if (!container) return;
+
+  container.innerHTML = customKnowledgeBase.map(d => `
+    <div class="chunk-card">
+      <div class="chunk-meta">
+        <span>📄 ${d.docName} (Page ${d.page})</span>
+        <span class="badge-rag">${d.category}</span>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-muted);">${d.content}</div>
+    </div>
+  `).join("");
+}
+
+function handleCustomDocUpload() {
+  const title = prompt("Enter Document Title (e.g. Library Rules 2026):");
+  if (!title) return;
+  const content = prompt("Enter Document Content text:");
+  if (!content) return;
+
+  const newDoc = {
+    id: "custom_" + Date.now(),
+    docName: title,
+    page: 1,
+    date: new Date().toISOString().split("T")[0],
+    category: "Custom Notice",
+    keywords: title.toLowerCase().split(/\s+/).concat(["notice", "rules"]),
+    content: content,
+    answer: `According to ${title}, ${content.slice(0, 100)}...`,
+    details: [content]
+  };
+
+  customKnowledgeBase.unshift(newDoc);
+  renderKnowledgeBaseSidebar();
+  renderModalChunkView();
+  alert(`Document "${title}" successfully ingested into RAG knowledge base!`);
+}
+
+// Text-to-Speech
 function speakMessage(elementId) {
   const el = document.getElementById(elementId);
   if (!el) return;
 
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel(); // stop current reading
+    window.speechSynthesis.cancel();
     const textToRead = el.innerText.replace(/Read Aloud|Copy Text/g, "");
     const utterance = new SpeechSynthesisUtterance(textToRead);
     utterance.rate = 0.95;
     window.speechSynthesis.speak(utterance);
-  } else {
-    alert("Speech Synthesis is not supported in your browser.");
   }
 }
 
-// Copy Message Text
 function copyMessageText(elementId) {
   const el = document.getElementById(elementId);
   if (!el) return;
   const cleanText = el.innerText.replace(/Read Aloud|Copy Text/g, "");
-  navigator.clipboard.writeText(cleanText).then(() => {
-    alert("Response copied to clipboard!");
-  });
+  navigator.clipboard.writeText(cleanText).then(() => alert("Copied to clipboard!"));
 }
 
-// Local Storage & Chat Persistence
+// Local Storage
 function saveChatToLocalStorage() {
   try {
-    localStorage.setItem("healthedu_chat_history", JSON.stringify(chatHistory));
-  } catch (e) {
-    console.error("Failed to save chat to local storage", e);
-  }
+    localStorage.setItem("collegeassist_chat_history", JSON.stringify(chatHistory));
+  } catch (e) {}
 }
 
 function loadSavedChat() {
   try {
-    const saved = localStorage.getItem("healthedu_chat_history");
+    const saved = localStorage.getItem("collegeassist_chat_history");
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -758,84 +548,41 @@ function loadSavedChat() {
             const msgRow = document.createElement("div");
             msgRow.className = "message-row user";
             msgRow.innerHTML = `
-              <div class="avatar user-avatar">👤</div>
+              <div class="avatar user-avatar">🎓</div>
               <div class="message-bubble">${escapeHtml(item.text)}</div>
             `;
             chatContainer.appendChild(msgRow);
-          } else if (item.role === "bot" && item.data) {
-            renderBotStructuredMessage(item.data);
+          } else if (item.role === "bot" && item.doc) {
+            renderRAGStructuredResponse(item.doc);
           }
         });
       }
     }
-  } catch (e) {
-    console.error("Failed to load chat history", e);
-  }
+  } catch (e) {}
 }
 
 function clearChatHistory() {
-  if (confirm("Are you sure you want to clear your health conversation history?")) {
+  if (confirm("Clear CollegeAssist AI conversation history?")) {
     chatHistory = [];
-    localStorage.removeItem("healthedu_chat_history");
-    const chatContainer = document.getElementById("chatMessages");
-    chatContainer.innerHTML = `
-      <div class="welcome-card" id="welcomeCard">
-        <h2 class="welcome-title">Welcome to HealthEduBot 🩺</h2>
-        <p class="welcome-desc">Your trusted AI health education assistant. Ask about conditions, wellness, nutrition, first aid, or common symptoms.</p>
-        <div class="disclaimer-pill">
-          <span>⚠️</span> Educational purpose only. Not a substitute for professional medical diagnosis or treatment.
-        </div>
-        <div class="quick-prompts-grid">
-          <div class="prompt-card" onclick="fillPrompt('What is diabetes?')">
-            <span class="prompt-card-icon">🩸</span>
-            <span class="prompt-card-title">What is diabetes?</span>
-            <span class="prompt-card-subtitle">Symptoms, causes & prevention</span>
-          </div>
-          <div class="prompt-card" onclick="fillPrompt('How to improve sleep hygiene?')">
-            <span class="prompt-card-icon">🌙</span>
-            <span class="prompt-card-title">Sleep Hygiene</span>
-            <span class="prompt-card-subtitle">Habits for restful sleep</span>
-          </div>
-          <div class="prompt-card" onclick="fillPrompt('First aid for minor thermal burns')">
-            <span class="prompt-card-icon">🩹</span>
-            <span class="prompt-card-title">First Aid for Burns</span>
-            <span class="prompt-card-subtitle">Immediate burn care</span>
-          </div>
-          <div class="prompt-card" onclick="fillPrompt('Common Cold vs Flu symptoms')">
-            <span class="prompt-card-icon">🤧</span>
-            <span class="prompt-card-title">Cold vs. Flu</span>
-            <span class="prompt-card-subtitle">Key differences & advice</span>
-          </div>
-        </div>
-      </div>
-    `;
-    dismissEmergencyBanner();
+    localStorage.removeItem("collegeassist_chat_history");
+    location.reload();
   }
 }
 
-// Export Chat Transcript to File Download
 function exportChatTranscript() {
   if (chatHistory.length === 0) {
-    alert("No chat messages to export.");
+    alert("No chat transcript to export.");
     return;
   }
 
-  let markdown = `# HealthEduBot - Educational Health Conversation Transcript\n`;
-  markdown += `Date: ${new Date().toLocaleString()}\n`;
-  markdown += `Disclaimer: Information provided is for educational purposes only and does not replace medical advice.\n\n---\n\n`;
+  let markdown = `# CollegeAssist AI - RAG Conversation Transcript\n`;
+  markdown += `Generated: ${new Date().toLocaleString()}\n\n---\n\n`;
 
   chatHistory.forEach(item => {
     if (item.role === "user") {
-      markdown += `### User:\n${item.text}\n\n`;
-    } else if (item.role === "bot" && item.data) {
-      const d = item.data;
-      markdown += `### HealthEduBot:\n`;
-      markdown += `**What it is:**\n${d.whatItIs}\n\n`;
-      markdown += `**Common symptoms:**\n${d.symptoms.map(s => `- ${s}`).join("\n")}\n\n`;
-      markdown += `**Possible causes:**\n${d.causes.map(c => `- ${c}`).join("\n")}\n\n`;
-      markdown += `**Prevention / Healthy habits:**\n${d.prevention.map(p => `- ${p}`).join("\n")}\n\n`;
-      markdown += `**When to seek medical help:**\n${d.seekHelp.map(h => `- ${h}`).join("\n")}\n\n`;
-      markdown += `*Important: Educational information only. Consult a doctor for personalized care.*\n\n---\n\n`;
+      markdown += `### Student / User:\n${item.text}\n\n`;
+    } else if (item.role === "bot" && item.doc) {
+      markdown += `### CollegeAssist AI:\n**Answer:**\n${item.doc.answer}\n\n**Details:**\n${item.doc.details.map(d=>`- ${d}`).join("\n")}\n\n**Source:** ${item.doc.docName}, Page ${item.doc.page}\n\n---\n\n`;
     }
   });
 
@@ -843,12 +590,10 @@ function exportChatTranscript() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `HealthEduBot_Summary_${Date.now()}.md`;
+  a.download = `CollegeAssist_RAG_Transcript_${Date.now()}.md`;
   a.click();
-  URL.revokeObjectURL(url);
 }
 
-// Utility: HTML Escaping
 function escapeHtml(text) {
   const div = document.createElement("div");
   div.innerText = text;

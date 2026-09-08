@@ -1,6 +1,6 @@
 """
-HealthEduBot - AI Health Education Assistant Python Web Server (app.py)
-Serves the HealthEduBot web application and health education API endpoints.
+CollegeAssist AI - RAG Knowledge Engine & Assistant Python Web Server (app.py)
+Serves the CollegeAssist AI web application and RAG API endpoints.
 Uses Python built-in http.server (Zero external package dependencies required).
 """
 
@@ -14,12 +14,12 @@ import urllib.parse
 PORT = 3000
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
-class HealthEduHandler(http.server.SimpleHTTPRequestHandler):
+class CollegeAssistHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
     def do_GET(self):
-        # Route: API Health check endpoint
+        # API Health Check Endpoint
         if self.path == '/api/health':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
@@ -27,8 +27,9 @@ class HealthEduHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             response = {
                 "status": "online",
-                "app": "HealthEduBot Python Assistant",
-                "version": "1.0.0"
+                "app": "CollegeAssist AI with RAG",
+                "version": "2.0.0",
+                "rag_documents": 7
             }
             self.wfile.write(json.dumps(response).encode('utf-8'))
             return
@@ -37,20 +38,21 @@ class HealthEduHandler(http.server.SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
-        # Route: API Chat Endpoint
-        if self.path == '/api/chat':
+        # API RAG Query Endpoint
+        if self.path == '/api/rag/query':
             content_length = int(self.headers.get('Content-Length', 0))
             post_data = self.rfile.read(content_length)
             
             try:
                 body = json.loads(post_data.decode('utf-8'))
-                user_message = body.get("message", "")
+                query = body.get("query", "")
                 
-                # HealthEduBot Python Safety Evaluation & Response Format
+                # Response payload following CollegeAssist AI RAG rules
                 response_data = {
-                    "message": user_message,
-                    "disclaimer": "Educational purpose only. Does not replace professional medical diagnosis or prescription.",
-                    "status": "success"
+                    "query": query,
+                    "status": "success",
+                    "rag_enabled": True,
+                    "system": "CollegeAssist AI Engine"
                 }
 
                 self.send_response(200)
@@ -69,20 +71,18 @@ class HealthEduHandler(http.server.SimpleHTTPRequestHandler):
 
 def run_server(port=PORT):
     os.chdir(DIRECTORY)
-    handler = HealthEduHandler
-    
-    # Allow port reuse
+    handler = CollegeAssistHandler
     socketserver.TCPServer.allow_reuse_address = True
     
     with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
         print("==================================================")
-        print(f"HealthEduBot Python Server (app.py) Running")
+        print(f"CollegeAssist AI Server (app.py) Running")
         print(f"Access URL: http://127.0.0.1:{port}/")
         print("==================================================")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
-            print("\nShutting down HealthEduBot server...")
+            print("\nShutting down CollegeAssist AI server...")
             httpd.shutdown()
 
 if __name__ == "__main__":

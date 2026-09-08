@@ -75,10 +75,10 @@ def run_server(port=PORT):
     socketserver.TCPServer.allow_reuse_address = True
     
     with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
-        print(f"==================================================")
-        print(f"🩺 HealthEduBot Python Server (app.py) Running")
-        print(f"🌐 Access URL: http://127.0.0.1:{port}/")
-        print(f"==================================================")
+        print("==================================================")
+        print(f"HealthEduBot Python Server (app.py) Running")
+        print(f"Access URL: http://127.0.0.1:{port}/")
+        print("==================================================")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
